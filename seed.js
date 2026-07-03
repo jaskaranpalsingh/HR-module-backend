@@ -95,11 +95,11 @@ const seed = async () => {
     // ─── Seed Attendance ─────────────────────────────────────────────────────
     const today = new Date().toISOString().split('T')[0];
     await Attendance.insertMany([
-      { id: 'ATT001', employeeId: 'EMP001', employeeName: 'Rajwinder Singh', date: today, checkIn: '09:05 AM', checkOut: '06:00 PM', status: 'On Time', totalHours: 8.9 },
+      { id: 'ATT001', employeeId: 'EMP001', employeeName: 'Rajwinder Singh', date: today, checkIn: '09:05 AM', checkOut: '06:00 PM', status: 'Present', totalHours: 8.9 },
       { id: 'ATT002', employeeId: 'EMP002', employeeName: 'Arjun Mehta', date: today, checkIn: '09:45 AM', checkOut: null, status: 'Late', totalHours: 0.0 },
-      { id: 'ATT003', employeeId: 'EMP003', employeeName: 'Priya Sharma', date: today, checkIn: '08:55 AM', checkOut: '05:30 PM', status: 'On Time', totalHours: 8.5 },
+      { id: 'ATT003', employeeId: 'EMP003', employeeName: 'Priya Sharma', date: today, checkIn: '08:55 AM', checkOut: '05:30 PM', status: 'Present', totalHours: 8.5 },
       { id: 'ATT004', employeeId: 'EMP004', employeeName: 'Rohan Gupta', date: today, checkIn: null, checkOut: null, status: 'Absent', totalHours: 0 },
-      { id: 'ATT005', employeeId: 'EMP005', employeeName: 'Sarah Connor', date: today, checkIn: '09:12 AM', checkOut: null, status: 'On Time', totalHours: 0.0 },
+      { id: 'ATT005', employeeId: 'EMP005', employeeName: 'Sarah Connor', date: today, checkIn: '09:12 AM', checkOut: null, status: 'Present', totalHours: 0.0 },
       { id: 'ATT006', employeeId: 'EMP006', employeeName: 'Michael Scott', date: today, checkIn: '10:15 AM', checkOut: null, status: 'Late', totalHours: 0.0 }
     ]);
     console.log('📋 Seeded attendance records');

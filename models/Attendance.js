@@ -28,12 +28,49 @@ const attendanceSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['On Time', 'Late', 'Absent', 'Present'],
+    enum: ['Present', 'Late', 'Absent'],
     default: 'Absent'
   },
   totalHours: {
     type: Number,
     default: 0
+  },
+  workHours: {
+    type: Number,
+    default: null
+  },
+  accumulatedHours: {
+    type: Number,
+    default: 0
+  },
+  latitude: {
+    type: Number,
+    default: null
+  },
+  longitude: {
+    type: Number,
+    default: null
+  },
+  accuracy: {
+    type: Number,
+    default: null
+  },
+  address: {
+    type: String,
+    default: null
+  },
+  ipAddress: {
+    type: String,
+    default: null
+  },
+  deviceInfo: {
+    type: String,
+    default: null
+  },
+  locationStatus: {
+    type: String,
+    enum: ['Inside Office', 'Outside Office', null],
+    default: null
   }
 }, {
   timestamps: true

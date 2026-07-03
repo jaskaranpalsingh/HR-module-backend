@@ -38,13 +38,25 @@ const employeeSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  uanDoc: {
+    type: String,
+    default: ''
+  },
   aadhaarNumber: {
     type: String,
     trim: true
   },
+  aadhaarDoc: {
+    type: String,
+    default: ''
+  },
   panNumber: {
     type: String,
     trim: true
+  },
+  panDoc: {
+    type: String,
+    default: ''
   },
   role: {
     type: String,

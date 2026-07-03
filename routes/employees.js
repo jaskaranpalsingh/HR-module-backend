@@ -11,7 +11,7 @@ const router = express.Router();
 // @desc    Get all employees (role-based salary masking)
 router.get('/', verifyToken, async (req, res) => {
   try {
-    const isHR = req.user.role === 'HR Admin';
+    const isHR = req.user.systemRole === 'HR Admin' || req.user.systemRole === 'Super Admin';
     const employees = await Employee.find().sort({ createdAt: -1 });
 
     if (!isHR) {
@@ -161,6 +161,10 @@ router.put('/:id', [verifyToken, requireAdmin], async (req, res) => {
       return res.status(404).json({ message: 'Employee not found' });
     }
 
+    if (employee.systemRole === 'Super Admin' && req.user.systemRole !== 'Super Admin') {
+      return res.status(403).json({ message: 'HR Admin cannot modify a Super Admin' });
+    }
+
     const {
       name,
       email,
@@ -176,16 +180,22 @@ router.put('/:id', [verifyToken, requireAdmin], async (req, res) => {
       officialEmail,
       uanNumber,
       aadhaarNumber,
-      panNumber
+      panNumber,
+      uanDoc,
+      aadhaarDoc,
+      panDoc
       // NOTE: systemRole is intentionally excluded — use /api/auth/assign-hr instead
     } = req.body;
 
     if (firstName) employee.firstName = firstName;
     if (lastName) employee.lastName = lastName;
     if (officialEmail) employee.officialEmail = officialEmail;
-    if (uanNumber) employee.uanNumber = uanNumber;
-    if (aadhaarNumber) employee.aadhaarNumber = aadhaarNumber;
-    if (panNumber) employee.panNumber = panNumber;
+    if (uanNumber !== undefined) employee.uanNumber = uanNumber;
+    if (aadhaarNumber !== undefined) employee.aadhaarNumber = aadhaarNumber;
+    if (panNumber !== undefined) employee.panNumber = panNumber;
+    if (uanDoc !== undefined) employee.uanDoc = uanDoc;
+    if (aadhaarDoc !== undefined) employee.aadhaarDoc = aadhaarDoc;
+    if (panDoc !== undefined) employee.panDoc = panDoc;
 
     if (firstName || lastName) {
       employee.name = `${firstName || employee.firstName || ''} ${lastName || employee.lastName || ''}`.trim();
@@ -220,10 +230,16 @@ router.put('/:id', [verifyToken, requireAdmin], async (req, res) => {
 // @desc    Delete an employee (admin only)
 router.delete('/:id', [verifyToken, requireAdmin], async (req, res) => {
   try {
-    const employee = await Employee.findOneAndDelete({ id: req.params.id });
-    if (!employee) {
+    const empToCheck = await Employee.findOne({ id: req.params.id });
+    if (!empToCheck) {
       return res.status(404).json({ message: 'Employee not found' });
     }
+    
+    if (empToCheck.systemRole === 'Super Admin' && req.user.systemRole !== 'Super Admin') {
+      return res.status(403).json({ message: 'HR Admin cannot delete a Super Admin' });
+    }
+
+    const employee = await Employee.findOneAndDelete({ id: req.params.id });
 
     // Cascade delete associated payroll and attendance records
     await Payroll.deleteMany({ employeeId: req.params.id });
