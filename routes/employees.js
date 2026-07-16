@@ -183,7 +183,8 @@ router.put('/:id', [verifyToken, requireAdmin], async (req, res) => {
       panNumber,
       uanDoc,
       aadhaarDoc,
-      panDoc
+      panDoc,
+      newPassword
       // NOTE: systemRole is intentionally excluded — use /api/auth/assign-hr instead
     } = req.body;
 
@@ -211,6 +212,12 @@ router.put('/:id', [verifyToken, requireAdmin], async (req, res) => {
     if (phone) employee.phone = phone;
     if (avatar) employee.avatar = avatar;
     if (status) employee.status = status;
+
+    // ── Change password if provided ──
+    if (newPassword && newPassword.trim().length >= 6) {
+      const salt = await bcryptjs.genSalt(10);
+      employee.password = await bcryptjs.hash(newPassword.trim(), salt);
+    }
 
     await employee.save();
 

@@ -34,7 +34,7 @@ const seed = async () => {
     // ─── Seed Employees ───────────────────────────────────────────────────────
     const employees = await Employee.insertMany([
       {
-        id: 'EMP000', name: 'Super Admin', email: 'superadmin@hrms.com',
+        id: 'EMP000', name: 'Super Admin', email: 'jaskaranpal2811@gmail.com',
         password: superAdminHash, role: 'Super Administrator', department: 'Management',
         joinDate: '2020-01-01', status: 'Active', salary: 0,
         phone: '+1 (555) 000-0000',
